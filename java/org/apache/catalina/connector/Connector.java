@@ -76,6 +76,16 @@ public class Connector extends LifecycleMBeanBase  {
     /**
      * Coyote protocol handler.
      */
+    /**
+     * Connector中具体是ProtocolHandler来处理请求的，不同的ProtocolHandler代表不同的
+     * 连接类型，比如，Http11Protocol使用的是普通的Socket来连接的，如果是Http11NioProtocal
+     * 使用的就是NioSocket来处理的。
+     * ProtocolHandler中包含3个非常重要的组件：Endpoint、Processor、Adapter.
+     * Endpoint用于处理底层的Socket的网络连接，Processor用于将Endpoint连接到的Socket
+     * 封装成Request,Adapter用于将封装好的REquest交给Container进行处理。
+     * 也就是说Endpoint用来实现TCP/IP协议，Processor用于实现Http协议，Adapter将请求适配到
+     * Servlet容器进行具体的处理。
+     */
     protected final ProtocolHandler protocolHandler;
     /**
      * The <code>Service</code> we are associated with (if any).
@@ -185,11 +195,15 @@ public class Connector extends LifecycleMBeanBase  {
 
     /**
      * Connector用于接收请求并将请求封装成Request和Response来进行具体的处理，最底层使用Socket来进行通信,request和response
-     * 是按照HTTP协议来进行封装的
+     * 是按照HTTP协议来进行封装的,所以Connect同时实现了TCP/IP协议和HTTP协议。
      */
     public Connector() {
         this(null);
     }
+//    Connector类本身的作用是在其创建时创建ProtocolHandler，然后在生命周期的相关方法中调用了
+//    ProtocolHandler的相关生命周期方法。Connector的使用时通过标签配置在conf/server.xml配置文件
+//    中。所以Connector是在Catalina的load()方法中根据conf/server.xml配置文件创建Server对象时创建的。
+//    Connector的生命周期方法是在Service中调用的。
     public Connector(String protocol) {
         setProtocol(protocol);
         // Instantiate protocol handler

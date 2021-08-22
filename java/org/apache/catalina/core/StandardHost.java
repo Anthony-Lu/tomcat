@@ -786,11 +786,16 @@ public class StandardHost extends ContainerBase implements Host {
      *
      * @exception LifecycleException if this component detects a fatal error
      *  that prevents this component from being used
+     *
+     *  这里的代码功能很简单，虽然看起来比较多。
+     *  就是检查HOst的管道中有没有指定的value，如果没有则添加进去。
+     *  检查的方法就是遍历所有的value然后通过名字判断
      */
     @Override
     protected synchronized void startInternal() throws LifecycleException {
 
         // Set error report valve
+        //如果管道中没有ErrorReportValue则将其加入到管道
         String errorValve = getErrorReportValveClass();
         if ((errorValve != null) && (!errorValve.equals(""))) {
             try {

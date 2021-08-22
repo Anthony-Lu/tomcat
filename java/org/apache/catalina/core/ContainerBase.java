@@ -783,10 +783,14 @@ public abstract class ContainerBase extends LifecycleMBeanBase
         // Start our subordinate components, if any
         logger = null;
         getLogger();
+        //如果有Cluster和Realm则启动
+        //Cluster用于配置集群，他的作用就是同步Session
         Cluster cluster = getClusterInternal();
         if (cluster instanceof Lifecycle) {
             ((Lifecycle) cluster).start();
         }
+        //Realm是Tomcat的安全域，可以从来管理资源的访问权限
+        //获取所有容器
         Realm realm = getRealmInternal();
         if (realm instanceof Lifecycle) {
             ((Lifecycle) realm).start();
@@ -796,9 +800,14 @@ public abstract class ContainerBase extends LifecycleMBeanBase
         Container[] children = findChildren();
         List<Future<Void>> results = new ArrayList<>();
         for (int i = 0; i < children.length; i++) {
-            results.add(startStopExecutor.submit(new StartChild(children[i])));
+            //通过线程调用子容器的start方法，相当于children[i].start();
+            //线程StartChildren是一个实现了Callable的内部类，主要作用就是用于调用子容器的Start方法
+            //results.add(startStopExecutor.submit(new StartChild(children[i])));
+            //为了方便调试，可以改成这样
+            children[i].start();
         }
 
+        //处理子容器启动线程的Future
         boolean fail = false;
         for (Future<Void> result : results) {
             try {
@@ -815,13 +824,16 @@ public abstract class ContainerBase extends LifecycleMBeanBase
         }
 
         // Start the Valves in our pipeline (including the basic), if any
+        //启动管道
         if (pipeline instanceof Lifecycle)
             ((Lifecycle) pipeline).start();
 
 
+        //将生命周期状态设置为LifecycleState.STARTING)
         setState(LifecycleState.STARTING);
 
         // Start our thread
+        //启动后台线程
         threadStart();
 
     }

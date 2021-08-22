@@ -530,6 +530,11 @@ public class CoyoteAdapter implements Adapter {
                 //check valves if we support async
                 request.setAsyncSupported(connector.getService().getContainer().getPipeline().isAsyncSupported());
                 // Calling the container
+//               创建处理完毕http的request对象和response对象，Connector调用最顶层容
+//               器（也就是是Container的顶层子容器Engine）的Pipeline来处理，顶层容器的
+//                Pipeline处理完之后就会在其BaseValue里调用下一层的Pipeline进行处理，这样就
+//                可以逐层调用所有容器的Pipeline来处理了，Engine的BaseValue是StanderEngineValue.
+//                也许不尽相同，但是Pipeline-Value模式，在实现上就是职责链的思维模式
                 connector.getService().getContainer().getPipeline().getFirst().invoke(request, response);
             }
             AsyncContextImpl asyncConImpl = (AsyncContextImpl)request.getAsyncContext();

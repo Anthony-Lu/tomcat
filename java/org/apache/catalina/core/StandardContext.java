@@ -2266,6 +2266,9 @@ public class StandardContext extends ContainerBase
      *
      * @param listener Java class name of a listener class
      */
+    /**
+     * 还记得Spring配置中的WContextLoaderListener么
+     */
     @Override
     public void addApplicationListener(String listener) {
 
@@ -4617,6 +4620,7 @@ public class StandardContext extends ContainerBase
             }
 
             // Configure and call application event listeners
+            //触发监听器，比如ContextLoadListener
             if (ok) {
                 if (!listenerStart()) {
                     log.error(sm.getString("standardContext.listenerFail"));
@@ -4643,6 +4647,7 @@ public class StandardContext extends ContainerBase
             }
 
             // Configure and call application filters
+            //配置过滤器
             if (ok) {
                 if (!filterStart()) {
                     log.error(sm.getString("standardContext.filterFail"));
@@ -4651,6 +4656,7 @@ public class StandardContext extends ContainerBase
             }
 
             // Load and initialize all "load on startup" servlets
+            // 配置所有的配设置为 load on startup 的Servlet
             if (ok) {
                 if (!loadOnStartup(findChildren())){
                     log.error(sm.getString("standardContext.servletFail"));
@@ -6208,6 +6214,7 @@ public class StandardContext extends ContainerBase
         }
 
         @Override
+
         public void addListener(Class<? extends EventListener> listenerClass) {
             throw new UnsupportedOperationException(
                     sm.getString("noPluggabilityServletContext.notAllowed"));

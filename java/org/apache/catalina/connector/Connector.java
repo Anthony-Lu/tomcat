@@ -183,6 +183,10 @@ public class Connector extends LifecycleMBeanBase  {
      protected boolean useBodyEncodingForURI = false;
 
 
+    /**
+     * Connector用于接收请求并将请求封装成Request和Response来进行具体的处理，最底层使用Socket来进行通信,request和response
+     * 是按照HTTP协议来进行封装的
+     */
     public Connector() {
         this(null);
     }

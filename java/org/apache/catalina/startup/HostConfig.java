@@ -1415,6 +1415,7 @@ public class HostConfig implements LifecycleListener {
             log.error(sm.getString("hostConfig.jmx.register", oname), e);
         }
 
+        //检查Host站点配置的位置是是否存在以及是不是目录
         if (host.getCreateDirs()) {
             File[] dirs = new File[] {host.getAppBaseFile(),host.getConfigBaseFile()};
             for (int i=0; i<dirs.length; i++) {

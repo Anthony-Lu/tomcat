@@ -416,6 +416,9 @@ public class StandardService extends LifecycleMBeanBase implements Service {
 
         // Start our defined Container first
         if (container != null) {
+            //一个Server中可以有多个Service，但是一个Service只能对应一个Container
+            //一个Container可以对应多个executors和多个Connector
+            //Engine作为Container的实现之一，是最顶层容器的容器
             synchronized (container) {
                 container.start();
             }

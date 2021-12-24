@@ -7,4 +7,4 @@ tomcat源码分析
 
 -Dcatalina.home=launch -Dcatalina.base=launch -Djava.endorsed.dirs=launch/endorsed -Djava.io.tmpdir=launch/temp -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.util.logging.config.file=launch/conf/logging.properties
 
-运行成功后，访问http://127.0.0.1:8080 即可。
+运行成功后，访问http://localhost:8080 即可。
